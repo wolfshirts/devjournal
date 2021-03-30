@@ -1,0 +1,24 @@
+{
+  "name": "devjournal",
+  "version": "1.0.0",
+  "description": "a developer journal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wolfshirts/devjournal.git"
+  },
+  "author": "ross r",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wolfshirts/devjournal/issues"
+  },
+  "homepage": "https://github.com/wolfshirts/devjournal#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.2",
+    "react": "^17.0.2"
+  }
+}
