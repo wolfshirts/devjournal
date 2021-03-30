@@ -4,6 +4,7 @@ import axios from "axios";
 class CarForm extends React.Component {
   constructor(props) {
     super(props);
+    this.props = props;
     this.state = {
       challenge: "",
       action: "",
@@ -33,12 +34,13 @@ class CarForm extends React.Component {
     axios
       .post("/addentry", this.state)
       .then((data) => {
-        console.log(data);
+        this.props.update();
       })
       .catch((e) => {
         console.log(e);
       });
     e.preventDefault();
+    this.setState({ challenge: "", action: "", result: "", tags: "" });
   }
 
   render() {
@@ -46,10 +48,11 @@ class CarForm extends React.Component {
     return (
       <div className="car-form">
         <h3>Challenge:</h3>
-        <textarea
+        <input
           value={challenge}
           onChange={this.handleChange}
           name="challenge"
+          placeholder="A well formulated challenge leads to better results."
         />
         <h3>Actions:</h3>
         <textarea value={action} onChange={this.handleChange} name="action" />

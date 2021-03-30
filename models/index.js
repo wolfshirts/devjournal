@@ -23,7 +23,6 @@ const postNewEntry = (post, cb) => {
   });
 
   newPost.save((err) => {
-    debugger;
     if (err) {
       cb(err, null);
     } else {
