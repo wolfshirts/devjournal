@@ -19,16 +19,21 @@ module.exports = {
     ],
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
+  // output: {
+  //   path: path.resolve(__dirname, "dist/"),
+  //   publicPath: "/dist/",
+  //   filename: "bundle.js",
+  // },
   output: {
-    path: path.resolve(__dirname, "dist/"),
-    publicPath: "/dist/",
+    path: path.resolve(__dirname, "public/"),
+    publicPath: "/public/",
     filename: "bundle.js",
   },
-  devServer: {
-    contentBase: path.join(__dirname, "public/"),
-    port: 3000,
-    publicPath: "http://localhost:3000/dist/",
-    hotOnly: true,
-  },
+  // devServer: {
+  //   contentBase: path.join(__dirname, "public/"),
+  //   port: 3000,
+  //   publicPath: "http://localhost:3000/dist/",
+  //   hotOnly: true,
+  // }
   plugins: [new webpack.HotModuleReplacementPlugin()],
 };
