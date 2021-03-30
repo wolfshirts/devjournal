@@ -17,7 +17,6 @@ class App extends React.Component {
     return (
       <div className="App">
         <h1>Dev Journal</h1>
-        {/* <h2>{this.getCurrentDate()}</h2> */}
         <this.GetCurrentDate />
         <CarForm />
       </div>

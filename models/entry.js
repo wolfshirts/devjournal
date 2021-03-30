@@ -1,17 +1,13 @@
 const mongoose = require("mongoose");
 
 const carSchema = new mongoose.Schema({
+  date: Date,
   challenge: String,
   action: String,
   result: String,
+  tags: String,
 });
 
-const journalEntrySchema = new mongoose.Schema({
-  // your code here
-  date: Date,
-  car: [carSchema],
-});
-
-const journalEntry = mongoose.model("JournalEntry", journalEntrySchema);
+const journalEntry = mongoose.model("CarModel", carSchema);
 
 module.exports = journalEntry;

@@ -1,4 +1,6 @@
 import React from "react";
+import axios from "axios";
+
 class CarForm extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +11,7 @@ class CarForm extends React.Component {
       tags: "",
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleChange(e) {
     // Figure out what we're dealing with.
@@ -26,7 +29,18 @@ class CarForm extends React.Component {
       this.setState({ tags: e.target.value });
     }
   }
-  handleSumbit(e) {}
+  handleSubmit(e) {
+    axios
+      .post("/addentry", this.state)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    e.preventDefault();
+  }
+
   render() {
     const { challenge, action, result, tags } = this.state;
     return (
@@ -43,7 +57,7 @@ class CarForm extends React.Component {
         <textarea value={result} onChange={this.handleChange} name="result" />
         <h4>Tags:</h4>
         <input value={tags} onChange={this.handleChange} name="tags" />
-        <button type="submit" name="submitButton">
+        <button type="submit" name="submitButton" onClick={this.handleSubmit}>
           Commit
         </button>
       </div>
