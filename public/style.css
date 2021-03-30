@@ -9,3 +9,15 @@
   justify-content: left;
   flex-wrap: wrap;
 }
+.entry-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  flex-wrap: wrap;
+}
+.journal-entry {
+  margin: 1%;
+  background-color: aquamarine;
+  width: 20%;
+  height: 300px;
+}

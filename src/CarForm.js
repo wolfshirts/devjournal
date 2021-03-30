@@ -36,11 +36,13 @@ class CarForm extends React.Component {
       .then((data) => {
         this.props.update();
       })
+      .then((d) => {
+        this.setState({ challenge: "", action: "", result: "", tags: "" });
+      })
       .catch((e) => {
         console.log(e);
       });
     e.preventDefault();
-    this.setState({ challenge: "", action: "", result: "", tags: "" });
   }
 
   render() {

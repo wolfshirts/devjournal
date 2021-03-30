@@ -6,6 +6,7 @@ import axios from "axios";
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.updateEntries = this.updateEntries.bind(this);
     this.state = {
       carForms: [<CarForm update={this.updateEntries} />],
       writeNew: true,
@@ -16,7 +17,6 @@ class App extends React.Component {
     this.addForm = this.addForm.bind(this);
     this.writeNew = this.writeNew.bind(this);
     this.viewOld = this.viewOld.bind(this);
-    this.updateEntries = this.updateEntries.bind(this);
   }
 
   GetCurrentDate() {
@@ -35,6 +35,7 @@ class App extends React.Component {
     axios
       .get("/getentries")
       .then((data) => {
+        debugger;
         this.setState({ priorEntries: data.data });
       })
       .catch((e) => {
@@ -91,7 +92,11 @@ class App extends React.Component {
           </div>
         )}
 
-        {this.state.viewOld && <PriorEntries entries={entryArray} />}
+        {this.state.viewOld && (
+          <div className="entry-div">
+            <PriorEntries entries={entryArray} />
+          </div>
+        )}
       </div>
     );
   }
