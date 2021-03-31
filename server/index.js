@@ -86,6 +86,36 @@ app.get("/getso", (req, res) => {
   });
 });
 
+app.put("/updateentry/:id", (req, res) => {
+  if (!req.params.id) {
+    res.status(400).send("Need the id to update.");
+  } else {
+    if (req.body.challenge) {
+      const search = req.body.challenge;
+
+      axios
+        .get(
+          `https://api.stackexchange.com/2.2/search/advanced?page=1&pagesize=5&order=desc&sort=relevance&q=${search}&accepted=True&site=stackoverflow&answers=5`
+        )
+        .then((data) => {
+          data.data.items.forEach((item) => {
+            db.postNewSoEntry({ item: item });
+          });
+          db.updateEntry(req.params.id, req.body, (err, result) => {
+            if (err) {
+              res.status(400).send(err);
+            } else {
+              res.status(200).send(result);
+            }
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }
+});
+
 app.listen(port, () => {
   console.log("express is on port " + port);
 });

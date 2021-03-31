@@ -10,12 +10,15 @@ class App extends React.Component {
     super(props);
     this.updateEntries = this.updateEntries.bind(this);
     this.updateSoEntries = this.updateSoEntries.bind(this);
+    this.showModal = this.showModal.bind(this);
+
     this.state = {
       carForms: [
         <CarForm
           key="0"
           update={this.updateEntries}
           updateSo={this.updateSoEntries}
+          close={this.showModal}
         />,
       ],
       writeNew: true,
@@ -26,18 +29,23 @@ class App extends React.Component {
       modal: false,
       modalId: null,
     };
+
     this.addForm = this.addForm.bind(this);
     this.writeNew = this.writeNew.bind(this);
     this.viewOld = this.viewOld.bind(this);
     this.viewSuggestions = this.viewSuggestions.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
     this.deleteSoEntry = this.deleteSoEntry.bind(this);
-    this.showModal = this.showModal.bind(this);
   }
 
   showModal(e) {
-    console.log(e);
-    this.setState({ modal: true, modalId: e.target.value });
+    let value;
+    if (!e) {
+      value = null;
+    } else {
+      value = e.target.value;
+    }
+    this.setState({ modal: !this.state.modal, modalId: value });
   }
 
   GetCurrentDate() {
@@ -127,6 +135,7 @@ class App extends React.Component {
         key={newForms.length + 1}
         update={this.updateEntries}
         updateSo={this.updateSoEntries}
+        close={this.showModal}
       />
     );
     this.setState({ carForms: newForms });
@@ -176,7 +185,14 @@ class App extends React.Component {
             />
           </div>
         )}
-        {this.state.modal && <FormModal id={this.state.modalId} />}
+        {this.state.modal && (
+          <FormModal
+            id={this.state.modalId}
+            update={this.updateEntries}
+            updateSo={this.updateSoEntries}
+            close={this.showModal}
+          />
+        )}
       </div>
     );
   }

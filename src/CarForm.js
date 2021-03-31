@@ -32,22 +32,43 @@ class CarForm extends React.Component {
     }
   }
   handleSubmit(e) {
-    if (this.state.challenge === "") {
-      this.setState({ err: true });
-      return;
+    if (this.props.id) {
+      const updateObject = {
+        challenge: this.state.challenge || undefined,
+        action: this.state.action || undefined,
+        result: this.state.result || undefined,
+        tags: this.state.tags || undefined,
+      };
+      console.log("handling submit");
+      axios
+        .put(`/updateentry/${this.props.id}`, updateObject)
+        .then((data) => {
+          this.props.update();
+          this.props.updateSo();
+          debugger;
+          this.props.close();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      if (this.state.challenge === "") {
+        this.setState({ err: true });
+        return;
+      }
+      axios
+        .post("/addentry", this.state)
+        .then((data) => {
+          this.props.update();
+          this.props.updateSo();
+        })
+        .then((d) => {
+          this.setState({ challenge: "", action: "", result: "", tags: "" });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     }
-    axios
-      .post("/addentry", this.state)
-      .then((data) => {
-        this.props.update();
-        this.props.updateSo();
-      })
-      .then((d) => {
-        this.setState({ challenge: "", action: "", result: "", tags: "" });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
     e.preventDefault();
   }
 
