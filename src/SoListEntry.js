@@ -1,7 +1,6 @@
 import React from "react";
 
 const SoListEntry = (props) => {
-  debugger;
   return (
     <div className="so-list-entry">
       <div>
@@ -10,6 +9,9 @@ const SoListEntry = (props) => {
       <div>
         <b>Tags:</b>
         <div>{props.entry.tags.join(" ")}</div>
+        <button value={props.entry.id} type="button" onClick={props.delete}>
+          delete
+        </button>
         <hr />
       </div>
     </div>

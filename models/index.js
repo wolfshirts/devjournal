@@ -91,6 +91,26 @@ const getSoEntries = (cb) => {
   });
 };
 
+const deleteEntry = (id, cb) => {
+  entry.journalEntry.deleteOne({ _id: id }, (err, result) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
+const deleteSoEntry = (id, cb) => {
+  entry.soEntry.deleteOne({ _id: id }, (err, result) => {
+    if (err) {
+      cb(err, null);
+    } else {
+      cb(null, result);
+    }
+  });
+};
+
 db.then((db) => console.log(`Connected to: ${mongoURI}`)).catch((err) => {
   console.log(`Mongo broke at: ${mongoURI}`);
   console.log(err);
@@ -101,4 +121,6 @@ module.exports = {
   getEntries,
   postNewSoEntry,
   getSoEntries,
+  deleteEntry,
+  deleteSoEntry,
 };

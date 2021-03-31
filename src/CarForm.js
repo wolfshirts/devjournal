@@ -10,6 +10,7 @@ class CarForm extends React.Component {
       action: "",
       result: "",
       tags: "",
+      err: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,10 +32,15 @@ class CarForm extends React.Component {
     }
   }
   handleSubmit(e) {
+    if (this.state.challenge === "") {
+      this.setState({ err: true });
+      return;
+    }
     axios
       .post("/addentry", this.state)
       .then((data) => {
         this.props.update();
+        this.props.updateSo();
       })
       .then((d) => {
         this.setState({ challenge: "", action: "", result: "", tags: "" });
@@ -46,10 +52,11 @@ class CarForm extends React.Component {
   }
 
   render() {
-    const { challenge, action, result, tags } = this.state;
+    const { challenge, action, result, tags, err } = this.state;
     return (
       <div className="car-form">
         <h3>Challenge:</h3>
+        {this.state.err && <h5>You must have a challenge!</h5>}
         <input
           value={challenge}
           onChange={this.handleChange}
@@ -62,9 +69,14 @@ class CarForm extends React.Component {
         <textarea value={result} onChange={this.handleChange} name="result" />
         <h4>Tags:</h4>
         <input value={tags} onChange={this.handleChange} name="tags" />
-        <button type="submit" name="submitButton" onClick={this.handleSubmit}>
-          Commit
-        </button>
+        <div className="controls">
+          <button type="button" name="submitButton" onClick={this.handleSubmit}>
+            Commit
+          </button>
+          <button type="button" name="deleteButton" onClick={this.delete}>
+            Delete
+          </button>
+        </div>
       </div>
     );
   }

@@ -38,6 +38,34 @@ app.post("/addentry", (req, res) => {
   });
 });
 
+app.delete("/deleteentry/:id", (req, res) => {
+  if (!req.params.id) {
+    res.status(400).send("Need the id of the entry to delete.");
+  } else {
+    db.deleteEntry(req.params.id, (err, result) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.status(200).send(result);
+      }
+    });
+  }
+});
+
+app.delete("/deletesoentry/:id", (req, res) => {
+  if (!req.params.id) {
+    res.status(400).send("need id of entry to delete");
+  } else {
+    db.deleteSoEntry(req.params.id, (err, result) => {
+      if (err) {
+        res.status(400).send(err);
+      } else {
+        res.status(200).send(result);
+      }
+    });
+  }
+});
+
 app.get("/getentries", (req, res) => {
   db.getEntries((err, result) => {
     if (err) {

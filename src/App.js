@@ -2,25 +2,42 @@ import React from "react";
 import CarForm from "./CarForm";
 import PriorEntries from "./PriorEntries";
 import Suggestions from "./Suggestions";
+import FormModal from "./FormModal";
 import axios from "axios";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.updateEntries = this.updateEntries.bind(this);
+    this.updateSoEntries = this.updateSoEntries.bind(this);
     this.state = {
-      carForms: [<CarForm update={this.updateEntries} />],
+      carForms: [
+        <CarForm
+          key="0"
+          update={this.updateEntries}
+          updateSo={this.updateSoEntries}
+        />,
+      ],
       writeNew: true,
       viewOld: false,
       suggestions: false,
       priorEntries: {},
       soEntries: [],
+      modal: false,
+      modalId: null,
     };
     this.addForm = this.addForm.bind(this);
     this.writeNew = this.writeNew.bind(this);
     this.viewOld = this.viewOld.bind(this);
     this.viewSuggestions = this.viewSuggestions.bind(this);
-    this.updateSoEntries = this.updateSoEntries.bind(this);
+    this.deleteEntry = this.deleteEntry.bind(this);
+    this.deleteSoEntry = this.deleteSoEntry.bind(this);
+    this.showModal = this.showModal.bind(this);
+  }
+
+  showModal(e) {
+    console.log(e);
+    this.setState({ modal: true, modalId: e.target.value });
   }
 
   GetCurrentDate() {
@@ -34,6 +51,27 @@ class App extends React.Component {
   componentDidMount() {
     this.updateEntries();
     this.updateSoEntries();
+  }
+
+  deleteSoEntry(e) {
+    axios
+      .delete(`/deletesoentry/${e.target.value}`)
+      .then((data) => {
+        this.updateSoEntries();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  deleteEntry(e) {
+    axios
+      .delete(`/deleteentry/${e.target.value}`)
+      .then((date) => {
+        this.updateEntries();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   updateEntries() {
@@ -84,7 +122,13 @@ class App extends React.Component {
 
   addForm() {
     const newForms = [...this.state.carForms];
-    newForms.push(<CarForm update={this.updateEntries} />);
+    newForms.push(
+      <CarForm
+        key={newForms.length + 1}
+        update={this.updateEntries}
+        updateSo={this.updateSoEntries}
+      />
+    );
     this.setState({ carForms: newForms });
   }
 
@@ -117,14 +161,22 @@ class App extends React.Component {
 
         {this.state.viewOld && (
           <div className="entry-div">
-            <PriorEntries entries={entryArray} />
+            <PriorEntries
+              entries={entryArray}
+              delete={this.deleteEntry}
+              showModal={this.showModal}
+            />
           </div>
         )}
         {this.state.suggestions && (
           <div className="suggestions-div">
-            <Suggestions entries={this.state.soEntries} />
+            <Suggestions
+              entries={this.state.soEntries}
+              delete={this.deleteSoEntry}
+            />
           </div>
         )}
+        {this.state.modal && <FormModal id={this.state.modalId} />}
       </div>
     );
   }
