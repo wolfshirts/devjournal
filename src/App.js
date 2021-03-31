@@ -1,6 +1,7 @@
 import React from "react";
 import CarForm from "./CarForm";
 import PriorEntries from "./PriorEntries";
+import Suggestions from "./Suggestions";
 import axios from "axios";
 
 class App extends React.Component {
@@ -13,10 +14,13 @@ class App extends React.Component {
       viewOld: false,
       suggestions: false,
       priorEntries: {},
+      soEntries: [],
     };
     this.addForm = this.addForm.bind(this);
     this.writeNew = this.writeNew.bind(this);
     this.viewOld = this.viewOld.bind(this);
+    this.viewSuggestions = this.viewSuggestions.bind(this);
+    this.updateSoEntries = this.updateSoEntries.bind(this);
   }
 
   GetCurrentDate() {
@@ -29,17 +33,28 @@ class App extends React.Component {
 
   componentDidMount() {
     this.updateEntries();
+    this.updateSoEntries();
   }
 
   updateEntries() {
     axios
       .get("/getentries")
       .then((data) => {
-        debugger;
         this.setState({ priorEntries: data.data });
       })
       .catch((e) => {
         console.log("Something broke!!!! ", e);
+      });
+  }
+
+  updateSoEntries() {
+    axios
+      .get("/getso")
+      .then((data) => {
+        this.setState({ soEntries: data.data });
+      })
+      .catch((e) => {
+        console.log("Broke getting so ", e);
       });
   }
 
@@ -87,7 +102,7 @@ class App extends React.Component {
           <div onClick={this.viewOld}>
             <u>Prior Entries</u>
           </div>
-          <div>
+          <div onClick={this.viewSuggestions}>
             <u>Suggestions</u>
           </div>
         </div>
@@ -103,6 +118,11 @@ class App extends React.Component {
         {this.state.viewOld && (
           <div className="entry-div">
             <PriorEntries entries={entryArray} />
+          </div>
+        )}
+        {this.state.suggestions && (
+          <div className="suggestions-div">
+            <Suggestions entries={this.state.soEntries} />
           </div>
         )}
       </div>

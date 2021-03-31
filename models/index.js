@@ -54,6 +54,7 @@ const getEntries = (cb) => {
         };
         res.forEach((item) => {
           const parsedObject = {
+            id: item._id,
             date: item.date,
             challenge: item.challenge,
             action: item.action,
@@ -67,6 +68,29 @@ const getEntries = (cb) => {
     });
 };
 
+const getSoEntries = (cb) => {
+  entry.soEntry.find({}, (err, result) => {
+    if (err) {
+      cb(err);
+    } else {
+      const results = [];
+      result.forEach((obj) => {
+        if (!obj.item) {
+          return;
+        }
+        const formatted = {
+          id: obj._id,
+          link: obj.item.link,
+          title: obj.item.title,
+          tags: obj.item.tags,
+        };
+        results.push(formatted);
+      });
+      cb(null, results);
+    }
+  });
+};
+
 db.then((db) => console.log(`Connected to: ${mongoURI}`)).catch((err) => {
   console.log(`Mongo broke at: ${mongoURI}`);
   console.log(err);
@@ -76,4 +100,5 @@ module.exports = {
   postNewEntry,
   getEntries,
   postNewSoEntry,
+  getSoEntries,
 };
