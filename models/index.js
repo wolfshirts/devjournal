@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const entry = require("./entry");
+const axios = require("axios");
 
 const mongoURI = "mongodb://localhost:27017/devjournal";
 
@@ -17,7 +18,7 @@ const postNewEntry = (post, cb) => {
   //   result: "got it posted.",
   //   tags: "mongo mongodb mongoose",
   // });
-  const newPost = new entry({
+  const newPost = new entry.journalEntry({
     date: Date.now(),
     ...post,
   });
@@ -26,13 +27,22 @@ const postNewEntry = (post, cb) => {
     if (err) {
       cb(err, null);
     } else {
-      cb(null, true);
+      cb(null, newPost);
+    }
+  });
+};
+
+const postNewSoEntry = (post, cb) => {
+  const newPost = new entry.soEntry(post);
+  newPost.save((err) => {
+    if (err) {
+      console.log(err);
     }
   });
 };
 
 const getEntries = (cb) => {
-  entry
+  entry.journalEntry
     .find({})
     .sort({ date: -1 })
     .exec((err, res) => {
@@ -65,4 +75,5 @@ db.then((db) => console.log(`Connected to: ${mongoURI}`)).catch((err) => {
 module.exports = {
   postNewEntry,
   getEntries,
+  postNewSoEntry,
 };

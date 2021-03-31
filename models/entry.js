@@ -8,6 +8,14 @@ const carSchema = new mongoose.Schema({
   tags: String,
 });
 
-const journalEntry = mongoose.model("CarModel", carSchema);
+const documentDumpSchema = new mongoose.Schema({
+  item: {},
+});
 
-module.exports = journalEntry;
+const journalEntry = mongoose.model("CarModel", carSchema);
+const soEntry = mongoose.model("SoModel", documentDumpSchema);
+
+module.exports = {
+  journalEntry,
+  soEntry,
+};

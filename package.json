@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack -w",
-    "start": "node ./server/index.js"
+    "start": "node ./server/index.js",
+    "mon": "nodemon ./server/index.js"
   },
   "repository": {
     "type": "git",

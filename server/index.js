@@ -1,5 +1,7 @@
 const express = require("express");
 const db = require("../models/index.js");
+const http = require("https");
+const axios = require("axios");
 
 const app = express();
 const port = 3000;
@@ -10,11 +12,30 @@ app.use(express.json());
 app.post("/addentry", (req, res) => {
   // Dump to db with req.body
   // Send back 200 ok or error.
+  let body = req.body;
   db.postNewEntry(req.body, (err, result) => {
     if (err) {
       res.status(400).send(err);
     } else {
-      res.status(200).send(result);
+      // const unixEpochNow = Date.now() / 1000;
+      // const pastEpoch = unixEpochNow - 31536000;
+      const search = result.challenge;
+      const tagged = result.tags;
+      axios
+        .get(
+          `https://api.stackexchange.com/2.2/search/advanced?page=1&pagesize=5&order=desc&sort=relevance&q=${search}&accepted=True&site=stackoverflow&answers=5`
+        )
+        .then((data) => {
+          data.data.items.forEach((item) => {
+            db.postNewSoEntry({ item: item });
+          });
+          res.send(data.data);
+        })
+        .catch((e) => {
+          res.send(e);
+        });
+
+      //res.status(200).send(result);
     }
   });
 });
@@ -28,6 +49,8 @@ app.get("/getentries", (req, res) => {
     }
   });
 });
+
+app.get("/getso", (req, res) => {});
 
 app.listen(port, () => {
   console.log("express is on port " + port);

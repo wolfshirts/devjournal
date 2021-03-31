@@ -59,6 +59,14 @@ class App extends React.Component {
     }
   }
 
+  viewSuggestions() {
+    if (this.state.suggestions) {
+      return;
+    } else {
+      this.setState({ writeNew: false, viewOld: false, suggestions: true });
+    }
+  }
+
   addForm() {
     const newForms = [...this.state.carForms];
     newForms.push(<CarForm update={this.updateEntries} />);
