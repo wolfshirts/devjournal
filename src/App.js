@@ -8,14 +8,17 @@ import axios from "axios";
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.processingState = false;
     this.updateEntries = this.updateEntries.bind(this);
     this.updateSoEntries = this.updateSoEntries.bind(this);
     this.showModal = this.showModal.bind(this);
-
+    this.deleteForm = this.deleteForm.bind(this);
     this.state = {
       carForms: [
         <CarForm
           key="0"
+          trackingId={0}
+          delete={this.deleteForm}
           update={this.updateEntries}
           updateSo={this.updateSoEntries}
           close={this.showModal}
@@ -132,13 +135,45 @@ class App extends React.Component {
     const newForms = [...this.state.carForms];
     newForms.push(
       <CarForm
-        key={newForms.length + 1}
+        trackingId={newForms.length}
+        key={newForms.length}
         update={this.updateEntries}
         updateSo={this.updateSoEntries}
         close={this.showModal}
+        delete={this.deleteForm}
       />
     );
     this.setState({ carForms: newForms });
+  }
+
+  deleteForm(e) {
+    const value = parseInt(e.target.value, 10);
+    if (this.state.carForms.length === 1 || this.processingState === true) {
+      return;
+    }
+    const carForms = Array.from(this.state.carForms);
+    let counter = -1;
+    let forms = carForms.map((obj, ind) => {
+      if (ind !== value) {
+        console.log(ind, value);
+        counter += 1;
+        return (
+          <CarForm
+            trackingId={counter}
+            key={ind}
+            update={this.updateEntries}
+            updateSo={this.updateSoEntries}
+            close={this.showModal}
+            delete={this.deleteForm}
+          />
+        );
+      }
+    });
+    forms = forms.filter((form) => form !== undefined);
+    this.processingState = true;
+    this.setState({ carForms: forms }, (err, result) => {
+      this.processingState = false;
+    });
   }
 
   render() {

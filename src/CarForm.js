@@ -94,9 +94,16 @@ class CarForm extends React.Component {
           <button type="button" name="submitButton" onClick={this.handleSubmit}>
             Commit
           </button>
-          <button type="button" name="deleteButton" onClick={this.delete}>
-            Delete
-          </button>
+          {!this.props.id && (
+            <button
+              type="button"
+              name="deleteButton"
+              value={this.props.trackingId}
+              onClick={this.props.delete}
+            >
+              Delete
+            </button>
+          )}
         </div>
       </div>
     );
