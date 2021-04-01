@@ -76,7 +76,7 @@ const getSoEntries = (cb) => {
       if (err) {
         cb(err);
       } else {
-        const results = [];
+        let results = [];
         result.forEach((obj) => {
           if (!obj.item) {
             return;
@@ -89,6 +89,7 @@ const getSoEntries = (cb) => {
           };
           results.push(formatted);
         });
+        results = results.reverse();
         cb(null, results);
       }
     });
