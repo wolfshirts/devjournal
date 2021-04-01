@@ -155,7 +155,6 @@ class App extends React.Component {
     let counter = -1;
     let forms = carForms.map((obj, ind) => {
       if (ind !== value) {
-        console.log(ind, value);
         counter += 1;
         return (
           <CarForm
